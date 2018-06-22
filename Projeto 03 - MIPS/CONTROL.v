@@ -10,12 +10,14 @@
 
 `define OPCODE_TIPO_R 6'b000000
 `define OPCODE_ADDI   6'b001000
+`define OPCODE_ADDIU  6'b001001
 `define OPCODE_LW     6'b100011
 `define OPCODE_SW     6'b101011
 `define OPCODE_BEQ    6'b000100
 `define OPCODE_J      6'b000010
 
 `define ALUOP_ADDI   2'b00
+`define ALUOP_ADDIU  2'b00
 `define ALUOP_LW     2'b00
 `define ALUOP_SW     2'b00
 `define ALUOP_BEQ    2'b01
@@ -92,83 +94,97 @@ always @(nrst, opcode) begin : decode_thread
   else begin
     case (opcode)
  
-    `OPCODE_TIPO_R: begin
-      branch 			= 0;
-      read_mem 			= 0;
-      write_mem 		= 0;
-      write_reg 		= 1;
-      alu_op 			= `ALUOP_TIPO_R;
-      mux_write_rt_rd 		= 1;
-      mux_alu_src_reg_imm 	= 0;
-      mux_branch_jump 		= 1;
-      mux_pc_branch 		= 0;
-      mux_reg_src_alu_mem 	= 1;  
-    end
-  
-    `OPCODE_ADDI: begin
-      branch 			= 0;
-      read_mem 			= 0;
-      write_mem 		= 0;
-      write_reg 		= 1;
-      alu_op 			= `ALUOP_ADDI;
-      mux_write_rt_rd 		= 0;
-      mux_alu_src_reg_imm 	= 1;
-      mux_branch_jump 		= 1;
-      mux_pc_branch 		= 0;
-      mux_reg_src_alu_mem 	= 1;  
-    end
- 
-    `OPCODE_LW: begin
-      branch 			= 0;
-      read_mem 			= 1;
-      write_mem 		= 0;
-      write_reg 		= 1;
-      alu_op 			= `ALUOP_LW;
-      mux_write_rt_rd 		= 0;
-      mux_alu_src_reg_imm 	= 1;
-      mux_branch_jump 		= 1;
-      mux_pc_branch 		= 0;
-      mux_reg_src_alu_mem 	= 0;  
-    end
+        `OPCODE_TIPO_R: begin
+        branch 			= 0;
+        read_mem 			= 0;
+        write_mem 		= 0;
+        write_reg 		= 1;
+        alu_op 			= `ALUOP_TIPO_R;
+        mux_write_rt_rd 		= 1;
+        mux_alu_src_reg_imm 	= 0;
+        mux_branch_jump 		= 1;
+        mux_pc_branch 		= 0;
+        mux_reg_src_alu_mem 	= 1;  
+        end
+    
+        `OPCODE_ADDI: begin
+        branch 			= 0;
+        read_mem 			= 0;
+        write_mem 		= 0;
+        write_reg 		= 1;
+        alu_op 			= `ALUOP_ADDI;
+        mux_write_rt_rd 		= 0;
+        mux_alu_src_reg_imm 	= 1;
+        mux_branch_jump 		= 1;
+        mux_pc_branch 		= 0;
+        mux_reg_src_alu_mem 	= 1;  
+        end
+        
+        /* TODO falta testar */
+        `OPCODE_ADDIU: begin
+        branch          = 0;
+        read_mem        = 0;
+        write_mem       = 0;
+        write_reg       = 1;
+        alu_op          = `ALUOP_ADDIU;
+        mux_write_rt_rd     = 0;
+        mux_alu_src_reg_imm = 1;
+        mux_branch_jump     = 1;
+        mux_pc_branch       = 0;
+        mux_reg_src_alu_mem = 1;
+        end
+        
+        `OPCODE_LW: begin
+        branch 			= 0;
+        read_mem 			= 1;
+        write_mem 		= 0;
+        write_reg 		= 1;
+        alu_op 			= `ALUOP_LW;
+        mux_write_rt_rd 		= 0;
+        mux_alu_src_reg_imm 	= 1;
+        mux_branch_jump 		= 1;
+        mux_pc_branch 		= 0;
+        mux_reg_src_alu_mem 	= 0;  
+        end
 
-    `OPCODE_SW: begin
-      branch 			= 0;
-      read_mem 			= 0;
-      write_mem 		= 1;
-      write_reg 		= 0;
-      alu_op 			= `ALUOP_SW;
-      mux_write_rt_rd 		= 0;
-      mux_alu_src_reg_imm 	= 1;
-      mux_branch_jump 		= 1;
-      mux_pc_branch 		= 0;
-      mux_reg_src_alu_mem 	= 0;  
-    end
+        `OPCODE_SW: begin
+        branch 			= 0;
+        read_mem 			= 0;
+        write_mem 		= 1;
+        write_reg 		= 0;
+        alu_op 			= `ALUOP_SW;
+        mux_write_rt_rd 		= 0;
+        mux_alu_src_reg_imm 	= 1;
+        mux_branch_jump 		= 1;
+        mux_pc_branch 		= 0;
+        mux_reg_src_alu_mem 	= 0;  
+        end
 
-    `OPCODE_BEQ: begin
-      branch 			= 1;
-      read_mem 			= 0;
-      write_mem 		= 0;
-      write_reg 		= 0;
-      alu_op 			= `ALUOP_BEQ;
-      mux_write_rt_rd 		= 0;
-      mux_alu_src_reg_imm 	= 0;
-      mux_branch_jump 		= 1;
-      mux_pc_branch 		= 1;
-      mux_reg_src_alu_mem 	= 0;  
-    end
+        `OPCODE_BEQ: begin
+        branch 			= 1;
+        read_mem 			= 0;
+        write_mem 		= 0;
+        write_reg 		= 0;
+        alu_op 			= `ALUOP_BEQ;
+        mux_write_rt_rd 		= 0;
+        mux_alu_src_reg_imm 	= 0;
+        mux_branch_jump 		= 1;
+        mux_pc_branch 		= 1;
+        mux_reg_src_alu_mem 	= 0;  
+        end
 
-    `OPCODE_J: begin
-      branch 			= 0;
-      read_mem 			= 0;
-      write_mem 		= 0;
-      write_reg 		= 0;
-      alu_op 			= `ALUOP_TIPO_R;
-      mux_write_rt_rd 		= 0;
-      mux_alu_src_reg_imm 	= 0;
-      mux_branch_jump 		= 0;
-      mux_pc_branch 		= 0;
-      mux_reg_src_alu_mem 	= 0;  
-    end
+        `OPCODE_J: begin
+        branch 			= 0;
+        read_mem 			= 0;
+        write_mem 		= 0;
+        write_reg 		= 0;
+        alu_op 			= `ALUOP_TIPO_R;
+        mux_write_rt_rd 		= 0;
+        mux_alu_src_reg_imm 	= 0;
+        mux_branch_jump 		= 0;
+        mux_pc_branch 		= 0;
+        mux_reg_src_alu_mem 	= 0;  
+        end
     endcase
   end
 end
