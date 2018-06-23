@@ -56,7 +56,8 @@ wire CONTROL_write_mem;
 wire CONTROL_write_reg;
 wire CONTROL_mux_write_rt_rd;
 wire CONTROL_mux_alu_src_reg_imm;
-wire [1:0] CONTROL_alu_op;
+// wire [1:0] CONTROL_alu_op;   // Alteracao de barramento, antigo
+wire [3:0] CONTROL_alu_op;      // Alteracao de barramento, novo
 wire CONTROL_mux_branch_jump;
 wire CONTROL_mux_pc_branch;
 wire CONTROL_mux_reg_src_alu_mem;

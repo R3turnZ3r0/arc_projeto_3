@@ -60,7 +60,12 @@ always @ (A or B or OP) begin : operacoes_ula
   4'b0111: begin
     S = (A < B) ? 1 : 0;
   end
-		  
+
+  // ~S = ~((~A & B) | (A | ~B)) -> ~XOR
+  4'b0100: begin
+    S = ~(A ^ B);
+  end
+  
   // S = ~(A | B)
   4'b1100: begin
     S = ~(A | B);
