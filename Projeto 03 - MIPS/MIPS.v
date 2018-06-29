@@ -20,6 +20,9 @@ wire nrst;
 
 wire [31:0] FOUR_CONST;
 
+// adicionado
+wire [4:0] THIRTY_ONE_CONST;
+
 wire [31:0] PC_out;
 
 wire [31:0] ADDER_PC_INCR_out;
@@ -50,19 +53,24 @@ wire [31:0] DMEM_out;
 
 wire [31:0] SHIFT_JUMP_out;
 
+// adicionado
+wire AND_out;
+
 wire CONTROL_branch;
 wire CONTROL_read_mem;
 wire CONTROL_write_mem;
 wire CONTROL_write_reg;
-wire CONTROL_mux_write_rt_rd;
+wire CONTROL_mux_write_rt_rd_cnst;      // modificado, nomenclatura
 wire CONTROL_mux_alu_src_reg_imm;
-// wire [1:0] CONTROL_alu_op;   // Alteracao de barramento, antigo
 wire [3:0] CONTROL_alu_op;      // Alteracao de barramento, novo
 wire CONTROL_mux_branch_jump;
-wire CONTROL_mux_pc_branch;
+wire CONTROL_mux_pc_branch;     // Provavelmente existe um bug aqui
 wire CONTROL_mux_reg_src_alu_mem;
 
 assign FOUR_CONST = 4;
+
+// adicionado
+assign THIRTY_ONE_CONST = 31; // valor do 'return address' register
 
 CONTROL control (
   .nrst(nrst),
@@ -71,7 +79,7 @@ CONTROL control (
   .read_mem(CONTROL_read_mem),
   .write_mem(CONTROL_write_mem),
   .write_reg(CONTROL_write_reg),
-  .mux_write_rt_rd(CONTROL_mux_write_rt_rd),
+  .mux_write_rt_rd_cnst(CONTROL_mux_write_rt_rd_cnst),
   .mux_alu_src_reg_imm(CONTROL_mux_alu_src_reg_imm),
   .alu_op(CONTROL_alu_op),
   .mux_branch_jump(CONTROL_mux_branch_jump),
@@ -91,14 +99,17 @@ IMEM imem (
   .instruction(IMEM_instr)
 );
 
-MUX21 #(
+// modificado, antes era mux21
+MUX41 #(
   .DATA_WIDTH(5)
 ) 
-mux_write_rs_rd (
+mux_write_rs_rd_cnst (
   .A(IMEM_instr[20:16]),
   .B(IMEM_instr[15:11]),
+  .C(THIRTY_ONE_CONST),
+  .D(THIRTY_ONE_CONST),     // repetido
   .O(MUX_WRITE_RS_RD_out),
-  .S(CONTROL_mux_write_rt_rd)
+  .S(CONTROL_mux_write_rt_rd_cnst)
 );
 
 REGISTER_BANK register_bank (
@@ -175,7 +186,15 @@ MUX21 mux_pc_branch (
   .A(ADDER_PC_INCR_out),
   .B(ADDER_BRANCH_out),
   .O(MUX_PC_BRANCH_out),
-  .S(CONTROL_mux_pc_branch)
+  // .S(CONTROL_mux_pc_branch)  // alterado - removido
+  .S(AND_out)                   // adicionado
+);
+
+// adicionado
+AND and_branch_jump (
+  .A(CONTROL_branch),
+  .B(ULA_zero),
+  .O(AND_out)
 );
 
 SHIFT_LEFT_2 shift_jump (

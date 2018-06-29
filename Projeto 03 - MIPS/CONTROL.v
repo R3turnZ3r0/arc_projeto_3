@@ -45,7 +45,7 @@ module CONTROL(
   read_mem,
   write_mem,
   write_reg,
-  mux_write_rt_rd,
+  mux_write_rt_rd_cnst,
   mux_alu_src_reg_imm,
   alu_op,
   mux_branch_jump,
@@ -59,7 +59,7 @@ output branch;
 output read_mem;
 output write_mem;
 output write_reg;
-output  mux_write_rt_rd;
+output mux_write_rt_rd_cnst;
 output mux_alu_src_reg_imm;
 output alu_op;
 output mux_branch_jump;
@@ -72,8 +72,8 @@ reg branch;
 reg read_mem;
 reg write_mem;
 reg write_reg;
-reg  mux_write_rt_rd;
-reg mux_alu_src_reg_imm;
+reg [1:0] mux_write_rt_rd_cnst;
+reg [1:0] mux_alu_src_reg_imm;
 //reg [1:0] alu_op;         // alteracao de barramento, antigo
 reg [3:0] alu_op;           // alteracao de barramento, novo
 reg mux_branch_jump;
@@ -83,14 +83,14 @@ reg mux_reg_src_alu_mem;
 initial begin
   branch 		= 0;
   read_mem 		= 0;
-  write_mem 		= 0;
-  write_reg 		= 0;
+  write_mem 	= 0;
+  write_reg 	= 0;
   alu_op 		= `ALUOP_TIPO_R;
-  mux_write_rt_rd 	= 1;
-  mux_alu_src_reg_imm 	= 0;
-  mux_branch_jump 	= 1;
-  mux_pc_branch 	= 0;
-  mux_reg_src_alu_mem 	= 1;
+  mux_write_rt_rd_cnst 	 = 2'b01;
+  mux_alu_src_reg_imm    = 2'b00;
+  mux_branch_jump 	     = 1;
+  mux_pc_branch 	     = 0;
+  mux_reg_src_alu_mem    = 1;
 end
 
 always @(nrst, opcode) begin : decode_thread
@@ -101,11 +101,11 @@ always @(nrst, opcode) begin : decode_thread
     write_mem 		= 0;
     write_reg 		= 0;
     alu_op 		    = `ALUOP_TIPO_R;
-    mux_write_rt_rd 	= 1;
-    mux_alu_src_reg_imm = 0;
-    mux_branch_jump 	= 1;
-    mux_pc_branch 	    = 0;
-    mux_reg_src_alu_mem = 1;  
+    mux_write_rt_rd_cnst    = 2'b01;
+    mux_alu_src_reg_imm     = 2'b00;
+    mux_branch_jump 	    = 1;
+    mux_pc_branch 	        = 0;
+    mux_reg_src_alu_mem     = 1;  
   end
   else begin
     case (opcode)
@@ -116,8 +116,8 @@ always @(nrst, opcode) begin : decode_thread
         write_mem 		= 0;
         write_reg 		= 1;
         alu_op 			= `ALUOP_TIPO_R;
-        mux_write_rt_rd 		= 1;
-        mux_alu_src_reg_imm 	= 0;
+        mux_write_rt_rd_cnst	= 2'b01;
+        mux_alu_src_reg_imm     = 2'b00;
         mux_branch_jump 		= 1;
         mux_pc_branch 		    = 0;
         mux_reg_src_alu_mem 	= 1;  
@@ -129,8 +129,8 @@ always @(nrst, opcode) begin : decode_thread
         write_mem 		= 0;
         write_reg 		= 1;
         alu_op 			= `ALUOP_ADDI;
-        mux_write_rt_rd 		= 0;
-        mux_alu_src_reg_imm 	= 1;
+        mux_write_rt_rd_cnst 	= 2'b00;
+        mux_alu_src_reg_imm     = 2'b01;
         mux_branch_jump 		= 1;
         mux_pc_branch 		    = 0;
         mux_reg_src_alu_mem 	= 1;  
@@ -143,11 +143,11 @@ always @(nrst, opcode) begin : decode_thread
         write_mem       = 0;
         write_reg       = 1;
         alu_op          = `ALUOP_ADDIU;
-        mux_write_rt_rd     = 0;
-        mux_alu_src_reg_imm = 1;
-        mux_branch_jump     = 1;
-        mux_pc_branch       = 0;
-        mux_reg_src_alu_mem = 1;
+        mux_write_rt_rd_cnst    = 2'b00;
+        mux_alu_src_reg_imm     = 2'b01;
+        mux_branch_jump         = 1;
+        mux_pc_branch           = 0;
+        mux_reg_src_alu_mem     = 1;
         end
         
         /* TODO falta testar*/
@@ -157,11 +157,11 @@ always @(nrst, opcode) begin : decode_thread
         write_mem       = 0;
         write_reg       = 1;
         alu_op          = `ALUOP_ANDI;
-        mux_write_rt_rd     = 0;
-        mux_alu_src_reg_imm = 1;
-        mux_branch_jump     = 1;
-        mux_pc_branch       = 0;
-        mux_reg_src_alu_mem = 1;
+        mux_write_rt_rd_cnst    = 2'b00;
+        mux_alu_src_reg_imm     = 2'b01;
+        mux_branch_jump         = 1;
+        mux_pc_branch           = 0;
+        mux_reg_src_alu_mem     = 1;
         end
         
         `OPCODE_LW: begin
@@ -170,8 +170,8 @@ always @(nrst, opcode) begin : decode_thread
         write_mem 		= 0;
         write_reg 		= 1;
         alu_op 			= `ALUOP_LW;
-        mux_write_rt_rd 		= 0;
-        mux_alu_src_reg_imm 	= 1;
+        mux_write_rt_rd_cnst    = 2'b00;
+        mux_alu_src_reg_imm     = 2'b01;
         mux_branch_jump 		= 1;
         mux_pc_branch 		    = 0;
         mux_reg_src_alu_mem 	= 0;  
@@ -183,8 +183,8 @@ always @(nrst, opcode) begin : decode_thread
         write_mem 		= 1;
         write_reg 		= 0;
         alu_op 			= `ALUOP_SW;
-        mux_write_rt_rd 		= 0;
-        mux_alu_src_reg_imm 	= 1;
+        mux_write_rt_rd_cnst 	= 2'b00;
+        mux_alu_src_reg_imm     = 2'b01;
         mux_branch_jump 		= 1;
         mux_pc_branch 		    = 0;
         mux_reg_src_alu_mem 	= 0;  
@@ -196,8 +196,8 @@ always @(nrst, opcode) begin : decode_thread
         write_mem 		= 0;
         write_reg 		= 0;
         alu_op 			= `ALUOP_BEQ;
-        mux_write_rt_rd 		= 0;
-        mux_alu_src_reg_imm 	= 0;
+        mux_write_rt_rd_cnst	= 2'b00;
+        mux_alu_src_reg_imm     = 2'b00;
         mux_branch_jump 		= 1;
         mux_pc_branch 	     	= 1;
         mux_reg_src_alu_mem 	= 0;  
@@ -210,8 +210,8 @@ always @(nrst, opcode) begin : decode_thread
         write_mem       = 0;
         write_reg       = 0;
         alu_op          = `ALUOP_BNE;
-        mux_write_rt_rd         = 0;
-        mux_alu_src_reg_imm     = 0;
+        mux_write_rt_rd_cnst    = 2'b00;
+        mux_alu_src_reg_imm     = 2'b00;
         mux_pc_branch           = 1;
         mux_reg_src_alu_mem     = 0;
         end
@@ -222,8 +222,8 @@ always @(nrst, opcode) begin : decode_thread
         write_mem 		= 0;
         write_reg 		= 0;
         alu_op 			= `ALUOP_TIPO_R;
-        mux_write_rt_rd 		= 0;
-        mux_alu_src_reg_imm 	= 0;
+        mux_write_rt_rd_cnst    = 2'b00;
+        mux_alu_src_reg_imm     = 2'b00;
         mux_branch_jump 		= 0;
         mux_pc_branch 		    = 0;
         mux_reg_src_alu_mem 	= 0;  
