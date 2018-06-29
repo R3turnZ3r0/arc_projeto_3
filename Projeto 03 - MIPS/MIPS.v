@@ -62,10 +62,10 @@ wire CONTROL_write_mem;
 wire CONTROL_write_reg;
 wire CONTROL_mux_write_rt_rd_cnst;      // modificado, nomenclatura
 wire CONTROL_mux_alu_src_reg_imm;
-wire [3:0] CONTROL_alu_op;      // Alteracao de barramento, novo
+wire [3:0] CONTROL_alu_op;              // Alteracao de barramento, novo
 wire CONTROL_mux_branch_jump;
-wire CONTROL_mux_pc_branch;     // Provavelmente existe um bug aqui
-wire CONTROL_mux_reg_src_alu_mem;
+wire CONTROL_mux_pc_branch;             // Provavelmente existe um bug aqui
+wire [1:0] CONTROL_mux_reg_src_alu_mem_pc;    // Alteracao de barramento para 2 bits // TODO alterar barramento no control
 
 assign FOUR_CONST = 4;
 
@@ -84,7 +84,7 @@ CONTROL control (
   .alu_op(CONTROL_alu_op),
   .mux_branch_jump(CONTROL_mux_branch_jump),
   .mux_pc_branch(CONTROL_mux_pc_branch),
-  .mux_reg_src_alu_mem(CONTROL_mux_reg_src_alu_mem)
+  .mux_reg_src_alu_mem(CONTROL_mux_reg_src_alu_mem_pc)
 );
 
 REGISTER pc (
@@ -158,11 +158,14 @@ DMEM dmem (
   .address(ULA_out)
 );
 
-MUX21 mux_reg_src_alu_mem (
+// modificado
+MUX41 mux_reg_src_alu_mem (
   .A(DMEM_out),
   .B(ULA_out),
+  .C(ADDER_PC_INCR_out),    // pc + 4
+  .D(ADDER_PC_INCR_out),    // pc + 4
   .O(MUX_REG_SRC_ALU_MEM_out),
-  .S(CONTROL_mux_reg_src_alu_mem)
+  .S(CONTROL_mux_reg_src_alu_mem_pc)
 );
 
 ADDER adder_pc_incr (
