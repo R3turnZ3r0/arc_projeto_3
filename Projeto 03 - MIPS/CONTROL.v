@@ -12,6 +12,7 @@
 `define OPCODE_ADDI   6'b001000
 `define OPCODE_ADDIU  6'b001001
 `define OPCODE_ANDI   6'b001100
+`define OPCODE_ORI    6'b001101
 `define OPCODE_LW     6'b100011
 `define OPCODE_LHU    6'b100101
 `define OPCODE_LBU    6'b100100
@@ -37,6 +38,7 @@ Vou (Jonas) alterar o tamanho deste barramento para 4 bits
 `define ALUOP_ADDI   4'b0000
 `define ALUOP_ADDIU  4'b0000
 `define ALUOP_ANDI   4'b0011
+`define ALUOP_ORI    4'b0101
 `define ALUOP_LW     4'b0000
 `define ALUOP_SW     4'b0000
 `define ALUOP_BEQ    4'b0001
@@ -163,7 +165,7 @@ always @(nrst, opcode) begin : decode_thread
         mux_reg_src_alu_mem_pc  = 2'b01;
         end
         
-        /* TODO falta testar*/
+        /* TODO falta testar */
         `OPCODE_ANDI: begin
         branch          = 0;
         read_mem        = 0;
@@ -177,6 +179,22 @@ always @(nrst, opcode) begin : decode_thread
         mux_load_byte_half_word	= 2'b10;
         mux_reg_src_alu_mem_pc  = 2'b01;
         end
+        
+        /* TODO falta testar */
+        `OPCODE_ORI: begin
+        branch			= 0;
+        read_mem		= 0;
+        write_mem		= 0;
+        write_reg		= 1;
+        alu_op			= `ALUOP_ORI;
+        mux_write_rt_rd_cnst	= 2'b00;
+        mux_alu_src_reg_imm		= 1;
+        mux_branch_jump			= 1;
+        mux_pc_branch			= 0;
+        mux_load_byte_half_word	= 2'b10;
+        mux_reg_src_alu_mem_pc	= 2'b01;
+        end
+        
         
         `OPCODE_LW: begin
         branch 			= 0;
