@@ -48,7 +48,7 @@ always @(negedge clk) begin
   
   // Big endian	
   if (write == 1'b1) begin
-    RAM[address+0] = write_data[31:24];    
+    RAM[address+0] = write_data[31:24];
     RAM[address+1] = write_data[23:16];
     RAM[address+2] = write_data[15:8];
     RAM[address+3] = write_data[7:0];

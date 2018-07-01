@@ -34,6 +34,7 @@ wire [31:0] MUX_BRANCH_JUMP_out;
 wire [31:0] MUX_ALU_SRC_REG_IMM_out;
 wire [31:0] MUX_REG_SRC_ALU_MEM_out;
 wire [4:0] MUX_WRITE_RS_RD_out;
+wire [31:0] MUX_LOAD_BYTE_HALF_WORD_out
 
 wire [31:0] REGISTER_BANK_read_data_1_out;
 wire [31:0] REGISTER_BANK_read_data_2_out;
@@ -63,14 +64,20 @@ wire CONTROL_write_reg;
 wire CONTROL_mux_write_rt_rd_cnst;      // modificado, nomenclatura
 wire CONTROL_mux_alu_src_reg_imm;
 wire [3:0] CONTROL_alu_op;              // Alteracao de barramento, novo
+// adicionado
+wire [1:0] CONTROL_mux_load_byte_half_word;
 wire CONTROL_mux_branch_jump;
 wire CONTROL_mux_pc_branch;             // Provavelmente existe um bug aqui
-wire [1:0] CONTROL_mux_reg_src_alu_mem_pc;    // Alteracao de barramento para 2 bits // TODO alterar barramento no control
+wire [1:0] CONTROL_mux_reg_src_alu_mem_pc;    // Alteracao de barramento para 2 bits
 
 assign FOUR_CONST = 4;
 
 // adicionado
 assign THIRTY_ONE_CONST = 31; // valor do 'return address' register
+// adicionado
+assign TWENTY_FOUR_ZERO_CONST = 0;	// bits para adicionar no lb
+// adicionado
+assign SIXTEEN_ZERO_CONST = 0;		// bits para adicionar no lh
 
 CONTROL control (
   .nrst(nrst),
@@ -158,9 +165,19 @@ DMEM dmem (
   .address(ULA_out)
 );
 
+// adicionado
+MUX41 mux_load_byte_half_word (
+  .A({24'b0, DMEM_out[7:0]}),
+  .B({16'b0, DMEM_out[15:0]}),
+  .C(DMEM_out),
+  .D(DMEM_out),
+  .S(CONTROL_mux_load_byte_half_word),
+  .O(MUX_LOAD_BYTE_HALF_WORD_out)
+);
+
 // modificado
 MUX41 mux_reg_src_alu_mem (
-  .A(DMEM_out),
+  .A(MUX_LOAD_BYTE_HALF_WORD_out),	// saida do mux load_byte_half_word
   .B(ULA_out),
   .C(ADDER_PC_INCR_out),    // pc + 4
   .D(ADDER_PC_INCR_out),    // pc + 4
