@@ -32,14 +32,16 @@ wire [31:0] IMEM_instr;
 wire [31:0] MUX_PC_BRANCH_out;
 wire [31:0] MUX_BRANCH_JUMP_out;
 wire [31:0] MUX_ALU_SRC_REG_IMM_out;
+// Adicionado
+wire [31:0] MUX_ALU_SRC_REGIMM_SHAMT_out;
 wire [31:0] MUX_REG_SRC_ALU_MEM_out;
-wire [4:0] MUX_WRITE_RS_RD_out;
+wire [4:0]  MUX_WRITE_RS_RD_out;
 wire [31:0] MUX_LOAD_BYTE_HALF_WORD_out
 
 wire [31:0] REGISTER_BANK_read_data_1_out;
 wire [31:0] REGISTER_BANK_read_data_2_out;
 
-wire [31:0] SIGN_EXTEND_out;
+wire [31:0] SIGN_ZERO_EXTEND_out;
 
 wire [31:0] SHIFT_BRANCH_out;
 
@@ -48,6 +50,8 @@ wire [31:0] ADDER_BRANCH_out;
 wire [31:0] ULA_out;
 wire ULA_zero;
 
+// adicionado
+wire ALU_CONTROL_mux_alu_src_regimm_shamt;
 wire [3:0] ALU_CONTROL_out;
 
 wire [31:0] DMEM_out;
@@ -61,6 +65,7 @@ wire CONTROL_branch;
 wire CONTROL_read_mem;
 wire CONTROL_write_mem;
 wire CONTROL_write_reg;
+wire CONTROL_sign_zero_extend;			// criado
 wire CONTROL_mux_write_rt_rd_cnst;      // modificado, nomenclatura
 wire CONTROL_mux_alu_src_reg_imm;
 wire [3:0] CONTROL_alu_op;              // Alteracao de barramento, novo
@@ -86,6 +91,7 @@ CONTROL control (
   .read_mem(CONTROL_read_mem),
   .write_mem(CONTROL_write_mem),
   .write_reg(CONTROL_write_reg),
+  .sign_zero_extend(CONTROL_sign_zero_extend),
   .mux_write_rt_rd_cnst(CONTROL_mux_write_rt_rd_cnst),
   .mux_alu_src_reg_imm(CONTROL_mux_alu_src_reg_imm),
   .alu_op(CONTROL_alu_op),
@@ -130,21 +136,38 @@ REGISTER_BANK register_bank (
   .read_data_2(REGISTER_BANK_read_data_2_out)
 );
 
-SIGN_EXTEND sign_extend (
+// substituido por EXTEND
+// SIGN_EXTEND sign_extend (
+//   .A(IMEM_instr[15:0]),
+//   .O(SIGN_EXTEND_out)
+// );
+// substituicao
+EXTEND sign_zero_extend (
   .A(IMEM_instr[15:0]),
-  .O(SIGN_EXTEND_out)
+  .S(CONTROL_sign_zero_extend),
+  .O(SIGN_ZERO_EXTEND_out)
 );
 
 MUX21 mux_alu_src_reg_imm (
   .A(REGISTER_BANK_read_data_2_out),
-  .B(SIGN_EXTEND_out),
+  .B(SIGN_ZERO_EXTEND_out),
   .O(MUX_ALU_SRC_REG_IMM_out),
   .S(CONTROL_mux_alu_src_reg_imm)
 );
 
+// adicionado MUX21 para selecionar entre:
+// - R[rt]/Imm;
+// - shamt.
+MUX21 mux_alu_src_regimm_shamt (
+  .A(MUX_ALU_SRC_REG_IMM_out),
+  .B({27'h0, IMEM_instr[10:5]}),
+  .O(MUX_ALU_SRC_REGIMM_SHAMT_out),
+  .S(ALU_CONTROL_mux_alu_src_regimm_shamt)
+);
+
 ULA ula (
   .A(REGISTER_BANK_read_data_1_out),   	       
-  .B(MUX_ALU_SRC_REG_IMM_out),           
+  .B(MUX_ALU_SRC_REGIMM_SHAMT_out),           
   .S(ULA_out),           
   .OP(ALU_CONTROL_out),          
   .Z(ULA_zero)            
@@ -153,6 +176,7 @@ ULA ula (
 ALU_CONTROL alu_control (
   .funct(IMEM_instr[5:0]),
   .op(CONTROL_alu_op),
+  .mux_alu_src_regimm_shamt(ALU_CONTROL_mux_alu_src_regimm_shamt),
   .control(ALU_CONTROL_out)
 );
 
@@ -167,8 +191,8 @@ DMEM dmem (
 
 // adicionado
 MUX41 mux_load_byte_half_word (
-  .A({24'b0, DMEM_out[7:0]}),
-  .B({16'b0, DMEM_out[15:0]}),
+  .A({24'h000000, DMEM_out[7:0]}),
+  .B({16'h0000, DMEM_out[15:0]}),
   .C(DMEM_out),
   .D(DMEM_out),
   .S(CONTROL_mux_load_byte_half_word),
@@ -192,7 +216,7 @@ ADDER adder_pc_incr (
 );
 
 SHIFT_LEFT_2 shift_branch (
-  .A(SIGN_EXTEND_out),
+  .A(SIGN_ZERO_EXTEND_out),
   .O(SHIFT_BRANCH_out)
 );
 

@@ -55,6 +55,16 @@ always @ (A or B or OP) begin : operacoes_ula
   4'b0110: begin
     S = A - B;
   end
+  
+  // S = A << B
+  4'b0011: begin
+    S = A << B;
+  end
+  
+  // S = A >> B
+  4'b0100: begin
+    S = A >> B;
+  end
 
   // S = A < B
   4'b0111: begin
