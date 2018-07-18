@@ -1,0 +1,40 @@
+$date
+	Wed Jul 18 08:59:34 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module MUX21_tb $end
+$var wire 32 ! O [31:0] $end
+$var reg 32 " A [31:0] $end
+$var reg 32 # B [31:0] $end
+$var reg 1 $ S $end
+$scope module mux21 $end
+$var wire 32 % A [31:0] $end
+$var wire 32 & B [31:0] $end
+$var wire 1 $ S $end
+$var wire 32 ' O [31:0] $end
+$upscope $end
+$upscope $end
+$scope module MUX21_tb $end
+$scope module mux21 $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1 '
+b10 &
+b1 %
+0$
+b10 #
+b1 "
+b1 !
+$end
+#2
+b10 !
+b10 '
+1$
