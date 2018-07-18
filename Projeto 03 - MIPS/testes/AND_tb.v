@@ -25,6 +25,11 @@ initial begin
 	B = 1'b1;
 end
 
+initial begin
+	$dumpfile("AND_tb.vcd");
+	$dumpvars(0, AND_tb, and);
+end
+
 AND and (
 	.A(A),
 	.B(B),
