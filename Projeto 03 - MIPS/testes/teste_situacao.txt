@@ -1,0 +1,4 @@
+MODULO           SITUACAO
+------------------------------------
+AND              Testado - OK
+ADDER            Teste   - Inspecao
