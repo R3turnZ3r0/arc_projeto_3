@@ -2,4 +2,5 @@ MODULO           SITUACAO           INSTRUCAO
 ---------------------------------------------
 AND              Testado - OK       Nao tem
 ADDER            Testado - OK       Nao tem
-MUX21            Testado - +/-      Nao tem
+MUX21            Testado - OK       ?
+MUX41            Testado - OK       ?
