@@ -1,0 +1,61 @@
+$date
+	Thu Jul 19 08:16:02 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module MUX41_tb $end
+$var wire 32 ! O [31:0] $end
+$var reg 32 " A [31:0] $end
+$var reg 32 # B [31:0] $end
+$var reg 32 $ C [31:0] $end
+$var reg 32 % D [31:0] $end
+$var reg 2 & S [1:0] $end
+$scope module mux41 $end
+$var wire 32 ' A [31:0] $end
+$var wire 32 ( B [31:0] $end
+$var wire 32 ) C [31:0] $end
+$var wire 32 * D [31:0] $end
+$var wire 2 + S [1:0] $end
+$var wire 32 , O [31:0] $end
+$upscope $end
+$upscope $end
+$scope module MUX41_tb $end
+$scope module mux41 $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b111 ,
+b0 +
+b0 *
+b110 )
+b101 (
+b111 '
+b0 &
+b0 %
+b110 $
+b101 #
+b111 "
+b111 !
+$end
+#2
+b101 !
+b101 ,
+b1 &
+b1 +
+#3
+b110 !
+b110 ,
+b10 &
+b10 +
+#4
+b0 !
+b0 ,
+b11 &
+b11 +
+#5
