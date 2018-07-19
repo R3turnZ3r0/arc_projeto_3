@@ -4,3 +4,4 @@ AND              Testado - OK       Nao tem
 ADDER            Testado - OK       Nao tem
 MUX21            Testado - OK       ?
 MUX41            Testado - OK       ?
+CONTROL          Testado - OK       ?
