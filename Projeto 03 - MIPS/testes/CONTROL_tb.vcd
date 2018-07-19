@@ -1,0 +1,165 @@
+$date
+	Thu Jul 19 09:44:05 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module CONTROL_tb $end
+$var wire 1 ! write_reg $end
+$var wire 1 " write_mem $end
+$var wire 1 # sign_zero_extend $end
+$var wire 1 $ read_mem $end
+$var wire 2 % mux_write_rt_rd_cnst [1:0] $end
+$var wire 2 & mux_reg_src_alu_mem_pc [1:0] $end
+$var wire 1 ' mux_pc_branch $end
+$var wire 2 ( mux_load_byte_half_word [1:0] $end
+$var wire 1 ) mux_branch_jump $end
+$var wire 1 * mux_alu_src_reg_imm $end
+$var wire 1 + branch $end
+$var wire 4 , alu_op [3:0] $end
+$var reg 1 - nrst $end
+$var reg 6 . opcode [5:0] $end
+$scope module control $end
+$var wire 1 - nrst $end
+$var wire 6 / opcode [5:0] $end
+$var reg 4 0 alu_op [3:0] $end
+$var reg 1 + branch $end
+$var reg 1 * mux_alu_src_reg_imm $end
+$var reg 1 ) mux_branch_jump $end
+$var reg 2 1 mux_load_byte_half_word [1:0] $end
+$var reg 1 ' mux_pc_branch $end
+$var reg 2 2 mux_reg_src_alu_mem_pc [1:0] $end
+$var reg 2 3 mux_write_rt_rd_cnst [1:0] $end
+$var reg 1 $ read_mem $end
+$var reg 1 # sign_zero_extend $end
+$var reg 1 " write_mem $end
+$var reg 1 ! write_reg $end
+$scope begin decode_thread $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module CONTROL_tb $end
+$scope module control $end
+$scope begin decode_thread $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1 3
+b1 2
+b10 1
+b10 0
+b0 /
+b0 .
+1-
+b10 ,
+0+
+0*
+1)
+b10 (
+0'
+b1 &
+b1 %
+0$
+1#
+0"
+1!
+$end
+#20
+1*
+b0 %
+b0 3
+b0 ,
+b0 0
+b1000 .
+b1000 /
+#30
+b1001 .
+b1001 /
+#40
+b11 ,
+b11 0
+0#
+b1100 .
+b1100 /
+#50
+b101 ,
+b101 0
+b1101 .
+b1101 /
+#60
+b110 ,
+b110 0
+1#
+b1010 .
+b1010 /
+#70
+b1011 .
+b1011 /
+#80
+b0 &
+b0 2
+b0 ,
+b0 0
+1$
+b100011 .
+b100011 /
+#90
+b1 (
+b1 1
+b100101 .
+b100101 /
+#100
+b0 (
+b0 1
+b100100 .
+b100100 /
+#110
+b10 (
+b10 1
+0!
+1"
+0$
+b101011 .
+b101011 /
+#120
+b101001 .
+b101001 /
+#130
+b101000 .
+b101000 /
+#140
+1'
+0*
+b1 ,
+b1 0
+0"
+1+
+b100 .
+b100 /
+#150
+b100 ,
+b100 0
+b101 .
+b101 /
+#160
+0'
+0)
+b10 ,
+b10 0
+0+
+b10 .
+b10 /
+#170
+b10 &
+b10 2
+b10 %
+b10 3
+1!
+b11 .
+b11 /
