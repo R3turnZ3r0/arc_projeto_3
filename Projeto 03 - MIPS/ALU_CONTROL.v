@@ -14,11 +14,11 @@ module ALU_CONTROL (
   control
 );
 
-input funct;
-input op;
+input [5:0] funct;
+input [3:0] op;
 // adicionado
 output mux_alu_src_reg_imm;
-output control;
+output [3:0] control;
 
 wire [5:0] funct;
 // wire [1:0] op;   // alteracao de barramento, antigo

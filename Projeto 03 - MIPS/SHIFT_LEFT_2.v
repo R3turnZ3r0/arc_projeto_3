@@ -12,8 +12,8 @@ module SHIFT_LEFT_2(
   O
 );
 
-input A;
-output O;
+input [31:0] A;
+output [31:0] O;
 
 wire [31:0] A;
 wire [31:0] O;

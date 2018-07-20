@@ -16,8 +16,8 @@ module REGISTER(
 
 input clk;
 input nrst;
-input A;
-output O;
+input [31:0] A;
+output [31:0] O;
 
 wire clk;
 wire nrst;

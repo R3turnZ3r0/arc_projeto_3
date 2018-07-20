@@ -20,11 +20,11 @@ module DMEM (
 parameter SIZE = 32'h8000;
 
 input clk;
-input write_data;
-output read_data;
+input [31:0] write_data;
+output [31:0] read_data;
 input write;
 input read;
-input address;
+input [31:0] address;
 
 wire clk;
 wire [31:0] write_data;

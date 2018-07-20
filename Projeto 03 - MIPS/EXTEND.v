@@ -17,22 +17,17 @@ module EXTEND(
   O
 );
 
-input A;
+input	[15:0] A;
 input S;
-output O;
+output	[31:0] O;
 
 wire [15:0] A;
 wire S;
 wire [31:0] O;
 
-always @(A, S) begin
-	if(S == 0) begin
-		O = {16'h0000, A};
-	end else begin
-		O[31:16] = (A[15 == 0]) ? 16'h0000 : 16'hffff;
-		O[15:0] = A;
-	end
-end
+assign O[15:0] = A;
+assign O[31:16] = (S == 0) ? 16'h0000 :
+                             (A[15] == 0) ? 16'h0000 : 16'hffff;
 
 // assign O[31:16] = (A[15] == 0) ? 0 : -1;
 // assign O[15:0] = A;

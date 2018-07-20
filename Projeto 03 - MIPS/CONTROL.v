@@ -66,19 +66,19 @@ module CONTROL(
 );
 
 input nrst;
-input opcode;
+input [5:0] opcode;
 output branch;
 output read_mem;
 output write_mem;
 output write_reg;
 output sign_zero_extend;
-output mux_write_rt_rd_cnst;
+output [1:0] mux_write_rt_rd_cnst;
 output mux_alu_src_reg_imm;
-output alu_op;
+output [3:0] alu_op;
 output mux_branch_jump;
 output mux_pc_branch;
-output mux_load_byte_half_word;
-output mux_reg_src_alu_mem_pc;
+output [1:0] mux_load_byte_half_word;
+output [1:0] mux_reg_src_alu_mem_pc;
 
 wire nrst;
 wire [5:0] opcode;

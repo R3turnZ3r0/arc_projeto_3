@@ -2,6 +2,8 @@ MODULO           SITUACAO           INSTRUCAO
 ---------------------------------------------
 AND              Testado - OK       Nao tem
 ADDER            Testado - OK       Nao tem
-MUX21            Testado - OK       ?
-MUX41            Testado - OK       ?
+MUX21            Testado - OK       Nao tem
+MUX41            Testado - OK       Nao tem
+EXTEND           Testado - OK       Nao tem
+SHIFT_LEFT_2     Testado - OK       Nao tem
 CONTROL          Testado - OK       ?

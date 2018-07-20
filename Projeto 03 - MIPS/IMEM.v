@@ -17,8 +17,8 @@ module IMEM (
 parameter SIZE = 32'h8000;
 parameter MEMORY_FILE = "memory.bin";
 
-input address;
-output instruction;
+input [31:0] address;
+output [31:0] instruction;
 
 wire [31:0] address;
 wire [31:0] instruction;
